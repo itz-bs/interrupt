@@ -1,0 +1,47 @@
+volatile int step = 0;  // To track LED pattern
+
+void buttonPress() {
+  step++;                // Move to next step
+  if (step > 4) step = 1; // After step 4, repeat
+
+  // Turn OFF all LEDs before setting new pattern
+  digitalWrite(8, LOW);
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+
+  // Choose which LEDs to turn ON
+  switch (step) {
+    case 1:
+      digitalWrite(8, HIGH); // LED1 ON
+      break;
+    case 2:
+      digitalWrite(9, HIGH); // LED2 ON
+      break;
+    case 3:
+      digitalWrite(10, HIGH); // LED3 ON
+      break;
+    case 4:
+      digitalWrite(8, HIGH);
+      digitalWrite(9, HIGH);
+      digitalWrite(10, HIGH);
+      break;
+  }
+}
+
+void setup() {
+  // LED pins as output
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+
+  // Button pin as input with internal pull-up
+  pinMode(2, INPUT_PULLUP);
+
+  // External interrupt on pin 2
+  attachInterrupt(digitalPinToInterrupt(2), buttonPress, FALLING);
+}
+
+void loop() {
+  // Nothing here, button press controls LEDs
+}
+
